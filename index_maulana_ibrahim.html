@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hari Guru — Ibu Eni Sulistiyani</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+
+body{
+  font-family:Poppins,sans-serif;
+  background:#05020c;
+  color:white;
+}
+
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:0;
+}
+
+.bg1,.bg2{
+  position:fixed;
+  border-radius:50%;
+  filter:blur(70px);
+  pointer-events:none;
+}
+
+.bg1{
+  width:500px;
+  height:500px;
+  background:#6d24c9;
+  opacity:.25;
+  top:-200px;
+  left:-150px;
+}
+
+.bg2{
+  width:500px;
+  height:500px;
+  background:#d42b87;
+  opacity:.18;
+  right:-200px;
+  bottom:-200px;
+}
+
+/* INTRO */
+
+#intro{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  background:
+    radial-gradient(circle,#211340,#08050f 60%,#020107);
+  transition:1s;
+}
+
+.introBox{
+  width:90%;
+  max-width:650px;
+}
+
+.kicker{
+  color:#d2b8ff;
+  font-size:10px;
+  letter-spacing:6px;
+  margin-bottom:22px;
+}
+
+.hero{
+  font-family:Cinzel,serif;
+  font-size:clamp(45px,13vw,90px);
+  line-height:.92;
+  background:linear-gradient(120deg,#fff,#e9bd5c,#fff);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.introText{
+  margin:25px auto;
+  max-width:500px;
+  color:#aaa4b8;
+  line-height:1.8;
+  font-size:13px;
+}
+
+.enter{
+  border:0;
+  padding:16px 30px;
+  border-radius:50px;
+  color:white;
+  background:linear-gradient(100deg,#7546df,#d3489d);
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 0 35px rgba(190,70,220,.45);
+}
+
+/* MAIN */
+
+#main{
+  position:fixed;
+  inset:0;
+  z-index:10;
+  opacity:0;
+  visibility:hidden;
+  transition:1s;
+}
+
+#main.show{
+  opacity:1;
+  visibility:visible;
+}
+
+/* ENVELOPE */
+
+#envelopeScreen{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.envelopeArea{
+  text-align:center;
+}
+
+.envelope{
+  position:relative;
+  width:min(420px,86vw);
+  height:260px;
+  cursor:pointer;
+  transition:1s;
+}
+
+.envelope.hide{
+  opacity:0;
+  transform:scale(.5);
+  pointer-events:none;
+}
+
+.envBody{
+  position:absolute;
+  inset:0;
+  border-radius:18px;
+  background:linear-gradient(145deg,#59318e,#21103e);
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:
+    0 30px 80px #000,
+    0 0 45px rgba(150,80,255,.25);
+}
+
+.left,
+.right,
+.bottom{
+  position:absolute;
+  inset:0;
+  z-index:3;
+}
+
+.left{
+  clip-path:polygon(0 0,50% 50%,0 100%);
+  background:#613798;
+}
+
+.right{
+  clip-path:polygon(100% 0,50% 50%,100% 100%);
+  background:#351c61;
+}
+
+.bottom{
+  clip-path:polygon(0 100%,50% 47%,100% 100%);
+  background:#472477;
+}
+
+.flap{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:62%;
+  z-index:7;
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  background:linear-gradient(145deg,#8656bd,#40236f);
+  transform-origin:top;
+  transition:1s;
+}
+
+.envelope.open .flap{
+  transform:rotateX(180deg);
+}
+
+.seal{
+  position:absolute;
+  z-index:9;
+  left:50%;
+  top:49%;
+  transform:translate(-50%,-50%);
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle,#ffe68a,#a66c18);
+  box-shadow:0 0 35px #e5b84f;
+  font-size:28px;
+  transition:.5s;
+}
+
+.envelope.open .seal{
+  transform:translate(-50%,-50%) scale(0);
+  opacity:0;
+}
+
+.paper{
+  position:absolute;
+  z-index:2;
+  width:84%;
+  height:80%;
+  left:8%;
+  top:10%;
+  padding:25px;
+  border-radius:12px;
+  background:#fffdf4;
+  color:#30213b;
+  transform:translateY(50px);
+  transition:1s;
+}
+
+.envelope.open .paper{
+  transform:translateY(-80px);
+}
+
+.paperTitle{
+  font-family:Cinzel,serif;
+  font-size:20px;
+}
+
+.paperName{
+  color:#9c6c1c;
+  font-weight:bold;
+  margin-top:8px;
+}
+
+.hint{
+  margin-top:30px;
+  color:#aaa5b5;
+  font-size:11px;
+  letter-spacing:2px;
+  animation:pulse 1.5s infinite;
+}
+
+/* MESSAGE */
+
+#message{
+  position:absolute;
+  inset:0;
+  z-index:30;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  opacity:0;
+  visibility:hidden;
+  transform:scale(.7);
+  transition:.8s;
+}
+
+#message.show{
+  opacity:1;
+  visibility:visible;
+  transform:scale(1);
+}
+
+.card{
+  width:min(850px,100%);
+  max-height:90vh;
+  overflow-y:auto;
+  padding:30px 24px;
+  border-radius:28px;
+  background:rgba(20,15,35,.88);
+  border:1px solid rgba(255,255,255,.15);
+  backdrop-filter:blur(25px);
+  box-shadow:0 30px 100px #000;
+}
+
+.card::-webkit-scrollbar{
+  width:4px;
+}
+
+.card::-webkit-scrollbar-thumb{
+  background:#9b62e8;
+  border-radius:20px;
+}
+
+.small{
+  text-align:center;
+  color:#bca5eb;
+  font-size:9px;
+  letter-spacing:5px;
+}
+
+.title{
+  text-align:center;
+  font-family:Cinzel,serif;
+  font-size:clamp(38px,9vw,65px);
+  color:#edca6c;
+  margin:8px 0;
+}
+
+.teacher{
+  text-align:center;
+  color:#edca6c;
+  font-size:clamp(20px,5vw,32px);
+  font-weight:700;
+}
+
+.from{
+  text-align:center;
+  color:#aaa4b4;
+  font-size:12px;
+  margin-top:6px;
+}
+
+.line{
+  width:130px;
+  height:1px;
+  margin:22px auto;
+  background:#e5c263;
+}
+
+.text{
+  color:#ddd9e3;
+  font-size:14px;
+  line-height:1.9;
+}
+
+.text p{
+  margin-bottom:15px;
+}
+
+.text h2{
+  text-align:center;
+  color:#eac96c;
+  font-family:Cinzel,serif;
+  margin-bottom:18px;
+}
+
+.quote{
+  padding:20px;
+  margin:20px 0;
+  text-align:center;
+  color:#f1dda1;
+  border-top:1px solid #8d6d35;
+  border-bottom:1px solid #8d6d35;
+  font-family:Cinzel,serif;
+}
+
+.signature{
+  text-align:center;
+  color:#aaa5b3;
+  margin-top:25px;
+}
+
+.signature strong{
+  display:block;
+  color:#edca6c;
+  font-size:20px;
+  margin-top:8px;
+}
+
+/* SECRET BUTTON */
+
+.secretArea{
+  margin-top:30px;
+  padding:25px 15px;
+  text-align:center;
+  border-radius:22px;
+  border:1px solid rgba(232,198,100,.25);
+  background:rgba(255,255,255,.04);
+}
+
+.secretArea p{
+  color:#aaa5b5;
+  font-size:11px;
+  margin-bottom:15px;
+}
+
+#secretBtn{
+  position:relative;
+  z-index:100;
+  border:0;
+  padding:15px 25px;
+  border-radius:50px;
+  color:white;
+  background:linear-gradient(100deg,#733dd1,#d33791);
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 0 30px rgba(210,55,170,.45);
+  transition:.25s;
+}
+
+#secretBtn:active{
+  transform:scale(.94);
+}
+
+/* SECRET */
+
+#secret{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:15px;
+  background:
+    radial-gradient(circle,#27103f,#030208 65%);
+  opacity:0;
+  visibility:hidden;
+  transform:scale(1.2);
+  transition:.8s;
+}
+
+#secret.show{
+  opacity:1;
+  visibility:visible;
+  transform:scale(1);
+}
+
+.secretCard{
+  width:min(700px,100%);
+  max-height:90vh;
+  overflow-y:auto;
+  padding:35px 22px;
+  text-align:center;
+  border-radius:30px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(25px);
+  box-shadow:0 0 100px rgba(190,70,255,.3);
+}
+
+.secretIcon{
+  font-size:65px;
+  animation:heartbeat 1s infinite;
+}
+
+.secretLabel{
+  color:#c3a9ef;
+  font-size:9px;
+  letter-spacing:5px;
+  margin-top:10px;
+}
+
+.secretTitle{
+  font-family:Cinzel,serif;
+  color:#edca6c;
+  font-size:clamp(35px,9vw,60px);
+  margin:10px 0 20px;
+}
+
+.secretText{
+  color:#e0dce6;
+  line-height:2;
+  font-size:14px;
+  white-space:pre-line;
+}
+
+.secretName{
+  color:#edca6c;
+  font-size:19px;
+  font-weight:bold;
+  margin-top:20px;
+}
+
+/* PARTICLES */
+
+.particle{
+  position:fixed;
+  z-index:1000;
+  pointer-events:none;
+  animation:explode 2.8s ease-out forwards;
+}
+
+@keyframes explode{
+  from{
+    transform:translate(0,0) scale(.2) rotate(0);
+    opacity:1;
+  }
+  to{
+    transform:
+      translate(var(--x),var(--y))
+      scale(1.3)
+      rotate(var(--r));
+    opacity:0;
+  }
+}
+
+.confetti{
+  position:fixed;
+  z-index:999;
+  width:7px;
+  height:13px;
+  pointer-events:none;
+  animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+  to{
+    transform:
+      translate(var(--x),var(--y))
+      rotate(900deg);
+    opacity:0;
+  }
+}
+
+@keyframes pulse{
+  50%{
+    transform:scale(1.08);
+  }
+}
+
+@keyframes heartbeat{
+  50%{
+    transform:scale(1.18);
+  }
+}
+
+/* FLASH KAGET */
+
+#flash{
+  position:fixed;
+  inset:0;
+  z-index:900;
+  background:white;
+  pointer-events:none;
+  opacity:0;
+}
+
+#flash.active{
+  animation:flash .55s ease;
+}
+
+@keyframes flash{
+  0%{opacity:0}
+  35%{opacity:.9}
+  100%{opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="bg1"></div>
+<div class="bg2"></div>
+
+<!-- INTRO -->
+
+<div id="intro">
+
+  <div class="introBox">
+
+    <div class="kicker">
+      ✦ A SPECIAL MESSAGE ✦
+    </div>
+
+    <div class="hero">
+      HAPPY<br>
+      TEACHER'S<br>
+      DAY
+    </div>
+
+    <div class="introText">
+      Sebuah pesan spesial untuk guru yang
+      telah memberikan ilmu, kesabaran,
+      dan inspirasi.
+    </div>
+
+    <button class="enter" id="enterBtn">
+      💌 BUKA PERJALANAN
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div id="main">
+
+  <!-- AMPLOP -->
+
+  <div id="envelopeScreen">
+
+    <div class="envelopeArea">
+
+      <div class="envelope" id="envelope">
+
+        <div class="envBody"></div>
+
+        <div class="paper">
+          <div class="paperTitle">
+            Sebuah Pesan Untuk
+          </div>
+
+          <div class="paperName">
+            IBU ENI SULISTIYANI
+          </div>
+        </div>
+
+        <div class="left"></div>
+        <div class="right"></div>
+        <div class="bottom"></div>
+
+        <div class="flap"></div>
+
+        <div class="seal">
+          ❤️
+        </div>
+
+      </div>
+
+      <div class="hint">
+        ✦ KLIK AMPLOP UNTUK MEMBUKA ✦
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- PESAN UTAMA -->
+
+  <div id="message">
+
+    <div class="card">
+
+      <div class="small">
+        ✦ SPECIAL MESSAGE ✦
+      </div>
+
+      <div class="title">
+        Terima Kasih
+      </div>
+
+      <div class="teacher">
+        IBU ENI SULISTIYANI
+      </div>
+
+      <div class="from">
+        Dari muridmu, MAULANA IBRAHIM ❤️
+      </div>
+
+      <div class="line"></div>
+
+      <div class="text">
+
+        <h2>🌷 Selamat Hari Guru 🌷</h2>
+
+        <p>
+          Assalamu'alaikum warahmatullahi wabarakatuh.
+        </p>
+
+        <p>
+          Selamat Hari Guru, Ibu Eni Sulistiyani.
+          Di hari yang istimewa ini, saya ingin
+          menyampaikan terima kasih yang tulus
+          untuk semua ilmu, nasihat, perhatian,
+          kesabaran, dan kebaikan yang telah Ibu berikan.
+        </p>
+
+        <p>
+          Terima kasih karena telah membimbing kami
+          dengan sabar. Terima kasih karena selalu
+          memberikan arahan ketika kami belum memahami
+          sesuatu dan terus mengajarkan kami untuk
+          menjadi lebih baik.
+        </p>
+
+        <div class="quote">
+          “Guru mungkin hanya mengajar di dalam kelas,
+          tetapi ilmu dan kebaikannya dapat menemani
+          muridnya sepanjang hidup.”
+        </div>
+
+        <p>
+          Saya menyadari bahwa menjadi seorang guru
+          bukanlah hal yang mudah. Ada banyak waktu,
+          tenaga, kesabaran, dan perhatian yang Ibu
+          berikan kepada kami.
+        </p>
+
+        <p>
+          Jika selama menjadi murid saya pernah melakukan
+          kesalahan, kurang memperhatikan, atau membuat
+          Ibu kecewa, saya ingin meminta maaf.
+        </p>
+
+        <p>
+          Terima kasih untuk setiap nasihat yang Ibu
+          berikan. Mungkin ada nasihat yang sekarang
+          terasa sederhana, tetapi suatu hari nanti
+          saya akan memahami betapa berharganya nasihat
+          tersebut.
+        </p>
+
+        <p>
+          Saya mungkin belum mampu membalas semua jasa Ibu.
+          Namun saya akan berusaha membawa ilmu dan
+          kebaikan yang Ibu berikan sebagai bekal
+          untuk masa depan saya.
+        </p>
+
+        <p>
+          Semoga Ibu selalu diberikan kesehatan,
+          kebahagiaan, umur yang panjang, dan kemudahan
+          dalam setiap langkah.
+        </p>
+
+        <div class="quote">
+          🌟 Terima kasih telah menjadi cahaya
+          yang membantu kami menemukan jalan
+          menuju masa depan. 🌟
+        </div>
+
+        <p>
+          Sekali lagi, Selamat Hari Guru,
+          Ibu Eni Sulistiyani.
+          Terima kasih atas semua yang telah Ibu lakukan
+          untuk kami.
+        </p>
+
+        <div class="signature">
+          Dengan penuh rasa hormat,
+          <br>
+          terima kasih dan doa terbaik.
+
+          <strong>
+            MAULANA IBRAHIM
+          </strong>
+
+          Muridmu ❤️
+        </div>
+
+
+        <!-- TOMBOL RAHASIA -->
+
+        <div class="secretArea">
+
+          <p>
+            🔒 Jangan tutup dulu...
+            masih ada satu pesan terakhir.
+          </p>
+
+          <button id="secretBtn">
+            🔐 BUKA PESAN RAHASIA
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- PESAN RAHASIA -->
+
+<div id="secret">
+
+  <div class="secretCard">
+
+    <div class="secretIcon">
+      💐
+    </div>
+
+    <div class="secretLabel">
+      ✦ PESAN YANG TIDAK TERUCAP ✦
+    </div>
+
+    <div class="secretTitle">
+      Ibu...
+    </div>
+
+    <div
+      class="secretText"
+      id="secretText"
+    ></div>
+
+    <div class="secretName">
+      — MAULANA IBRAHIM ❤️
+    </div>
+
+  </div>
+
+</div>
+
+
+<div id="flash"></div>
+
+
+<script>
+
+/* =========================
+   BINTANG
+========================= */
+
+const canvas =
+document.getElementById("stars");
+
+const ctx =
+canvas.getContext("2d");
+
+let stars=[];
+
+function resizeCanvas(){
+
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+
+}
+
+resizeCanvas();
+
+window.addEventListener(
+  "resize",
+  resizeCanvas
+);
+
+for(let i=0;i<160;i++){
+
+  stars.push({
+    x:Math.random()*window.innerWidth,
+    y:Math.random()*window.innerHeight,
+    r:Math.random()*1.5,
+    speed:Math.random()*.4+.05
+  });
+
+}
+
+function drawStars(){
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  for(const s of stars){
+
+    ctx.beginPath();
+
+    ctx.arc(
+      s.x,
+      s.y,
+      s.r,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fillStyle="white";
+    ctx.globalAlpha=.7;
+
+    ctx.fill();
+
+    s.y-=s.speed;
+
+    if(s.y<0){
+
+      s.y=canvas.height;
+      s.x=Math.random()*canvas.width;
+
+    }
+
+  }
+
+  ctx.globalAlpha=1;
+
+  requestAnimationFrame(drawStars);
+
+}
+
+drawStars();
+
+
+/* =========================
+   ELEMEN
+========================= */
+
+const intro =
+document.getElementById("intro");
+
+const main =
+document.getElementById("main");
+
+const envelope =
+document.getElementById("envelope");
+
+const message =
+document.getElementById("message");
+
+const secret =
+document.getElementById("secret");
+
+const secretBtn =
+document.getElementById("secretBtn");
+
+const flash =
+document.getElementById("flash");
+
+const secretText =
+document.getElementById("secretText");
+
+
+/* =========================
+   TOMBOL MASUK
+========================= */
+
+document
+.getElementById("enterBtn")
+.addEventListener("click",function(){
+
+  burst(80);
+
+  intro.style.opacity="0";
+  intro.style.transform="scale(1.08)";
+
+  setTimeout(function(){
+
+    intro.style.display="none";
+
+    main.classList.add("show");
+
+  },900);
+
+});
+
+
+/* =========================
+   BUKA AMPLOP
+========================= */
+
+let envelopeOpened=false;
+
+envelope.addEventListener("click",function(){
+
+  if(envelopeOpened) return;
+
+  envelopeOpened=true;
+
+  envelope.classList.add("open");
+
+  burst(120);
+
+  setTimeout(function(){
+
+    envelope.classList.add("hide");
+
+  },1000);
+
+  setTimeout(function(){
+
+    message.classList.add("show");
+
+  },1300);
+
+});
+
+
+/* =========================
+   PESAN RAHASIA
+========================= */
+
+secretBtn.addEventListener("click",function(e){
+
+  e.stopPropagation();
+
+  /* FLASH */
+
+  flash.classList.remove("active");
+
+  void flash.offsetWidth;
+
+  flash.classList.add("active");
+
+
+  /* LEDAKAN BESAR */
+
+  burst(220);
+
+
+  /* MUNCULKAN PESAN */
+
+  setTimeout(function(){
+
+    secret.classList.add("show");
+
+    typeSecret();
+
+  },650);
+
+});
+
+
+/* =========================
+   PESAN KETIK
+========================= */
+
+function typeSecret(){
+
+  const text =
+`Ibu Eni...
+
+Ada satu hal yang mungkin jarang saya katakan secara langsung.
+
+Terima kasih.
+
+Terima kasih karena pernah percaya kepada saya,
+bahkan ketika saya sendiri masih belajar untuk
+percaya kepada kemampuan saya.
+
+Mungkin bagi Ibu, apa yang Ibu lakukan hanyalah
+bagian dari tugas seorang guru.
+
+Tetapi bagi seorang murid,
+satu nasihat, satu perhatian,
+bahkan satu kalimat sederhana
+dari seorang guru bisa menjadi sesuatu
+yang diingat sangat lama.
+
+Saya mungkin akan lulus.
+Saya mungkin akan pergi jauh.
+Saya mungkin tidak lagi duduk di kelas Ibu.
+
+Tetapi kebaikan seorang guru
+tidak pernah benar-benar pergi.
+
+Ilmunya tetap tinggal.
+Nasihatnya tetap tinggal.
+Kenangannya tetap tinggal.
+
+Kalau suatu hari nanti Ibu bertanya,
+
+“Apakah murid-murid Ibu masih mengingat Ibu?”
+
+Jawabannya adalah...
+
+IYA, BU. ❤️
+
+Saya akan selalu mengingat
+bahwa pernah ada seorang guru bernama
+Ibu Eni Sulistiyani
+yang menjadi bagian dari perjalanan saya.
+
+Terima kasih sudah menjadi
+bagian dari cerita hidup saya.
+
+Selamat Hari Guru, Ibu.
+
+Semoga suatu hari nanti
+Ibu melihat saya berhasil
+dan bisa berkata:
+
+“Dulu dia adalah muridku.”`;
+
+  secretText.textContent="";
+
+  let i=0;
+
+  const timer=setInterval(function(){
+
+    secretText.textContent += text[i];
+
+    i++;
+
+    if(i>=text.length){
+
+      clearInterval(timer);
+
+    }
+
+  },15);
+
+}
+
+
+/* =========================
+   LEDAKAN
+========================= */
+
+function burst(amount){
+
+  const items=[
+    "🌸",
+    "🌺",
+    "🌷",
+    "🌹",
+    "💐",
+    "🌼",
+    "🌻",
+    "❤️",
+    "💖",
+    "💗",
+    "✨",
+    "⭐",
+    "💫"
+  ];
+
+  for(let i=0;i<amount;i++){
+
+    const p =
+      document.createElement("div");
+
+    p.className="particle";
+
+    p.textContent =
+      items[
+        Math.floor(
+          Math.random()*items.length
+        )
+      ];
+
+    p.style.left="50%";
+    p.style.top="50%";
+
+    p.style.fontSize =
+      (14+Math.random()*25)+"px";
+
+    p.style.setProperty(
+      "--x",
+      (Math.random()*1500-750)+"px"
+    );
+
+    p.style.setProperty(
+      "--y",
+      (Math.random()*1100-550)+"px"
+    );
+
+    p.style.setProperty(
+      "--r",
+      (Math.random()*1400-700)+"deg"
+    );
+
+    document.body.appendChild(p);
+
+    setTimeout(function(){
+      p.remove();
+    },3000);
+
+  }
+
+
+  /* CONFETTI */
+
+  for(let i=0;i<amount;i++){
+
+    const c =
+      document.createElement("div");
+
+    c.className="confetti";
+
+    c.style.left="50%";
+    c.style.top="50%";
+
+    c.style.background =
+      "hsl("+
+      Math.random()*360+
+      ",90%,70%)";
+
+    c.style.setProperty(
+      "--x",
+      (Math.random()*1600-800)+"px"
+    );
+
+    c.style.setProperty(
+      "--y",
+      (Math.random()*1100-400)+"px"
+    );
+
+    document.body.appendChild(c);
+
+    setTimeout(function(){
+      c.remove();
+    },3200);
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
